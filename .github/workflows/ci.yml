@@ -32,10 +32,18 @@ jobs:
         run: pytest tests/
 
       - name: Commit and Push (if tests pass)
-        run: |
-          git config --local user.email "your-email@example.com"
-          git config --local user.name "your-name"
-          git add requirements.txt
-          git commit -m "Automatically update dependencies"
-          git push
-        if: success()
+run: |
+      git config --local user.email "your-email@example.com"
+      git config --local user.name "your-name"
+      git add requirements.txt
+        
+      # Check if there are changes to commit
+      if ! git diff --cached --quiet; then
+        git commit -m "Automatically update dependencies"
+        git push
+      else
+        echo "No changes to commit."
+      fi
+
+if: success()
+
