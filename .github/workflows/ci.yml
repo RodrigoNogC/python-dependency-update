@@ -5,37 +5,37 @@ on:
     branches:
       - main
   schedule:
-    - cron: '0 3 * * *'
+    - cron: '0 3 * * *' # Executes daily at 3 AM
 
 jobs:
   update-dependencies:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout código
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Configurar Python
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.x'
 
-      - name: Instalar dependências
+      - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          
-      - name: Atualizar dependências
+
+      - name: Update dependencies
         run: python update_dependencies.py
 
-      - name: Executar testes de integração
+      - name: Run integration tests
         run: pytest tests/
 
-      - name: Commit e Push (se os testes passarem)
+      - name: Commit and Push (if tests pass)
         run: |
-          git config --local user.email "seu-email@exemplo.com"
-          git config --local user.name "seu-nome"
+          git config --local user.email "your-email@example.com"
+          git config --local user.name "your-name"
           git add requirements.txt
-          git commit -m "Atualizar dependências automaticamente"
+          git commit -m "Automatically update dependencies"
           git push
         if: success()
